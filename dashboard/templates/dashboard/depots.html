@@ -1,0 +1,158 @@
+{% extends 'dashboard/base.html' %}
+
+{% load static %}
+
+{% block title %}Institutions{% endblock %}
+
+{% block modal %}
+
+{% include 'dashboard/components/modal/add_institution.html' %} 
+
+{% endblock %}
+
+{% block content %}
+
+<div class="app-main__inner">
+    <div class="app-page-title">
+        <div class="page-title-wrapper">
+            <div class="page-title-heading">
+                <div class="page-title-icon">
+                    <i class="pe-7s-drawer icon-gradient bg-happy-itmeo">
+                    </i>
+                </div>
+                <div>
+                    <a href="#">
+                        Institutions
+                    </a>
+                </div>
+            </div>
+            <div class="page-title-actions">
+                <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target=".addInstitution"><i class="fa fa-plus"></i> Institution</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="main-card mb-3 card">
+
+                <div class="card-header">
+                    <i class="header-icon lnr-screen icon-gradient bg-warm-flame"></i>
+                    Institutions
+                    <div class="btn-actions-pane-right">
+                    </div>
+                </div>
+
+                <div class="card-body"><h5 class="card-title">Institutions</h5>
+                    <table class="mb-0 table table-bordered table-hover table-striped dataTables-example" >
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone Number</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for institution in institutions%}
+                                <tr>
+                                    <td>{{ institution.name }}</td>
+                                    <td>{{ institution.phone_number }}</td>
+                                    <td>{{ institution.email_address }}</td>
+                                    <td>
+                                        <span class="label status->label">name</span>
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="btn-group">
+                                            <a href="{% url 'dashboard-admin-institution' institution.id %}" class="mb-2 mr-2 btn btn-primary">View</a>
+                                            <a href="#" class="mb-2 mr-2 btn btn-warning">Restore</a>
+                                            <a href="#" class="mb-2 mr-2 btn btn-danger">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone Number</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}
+
+
+{% block js %}
+<!-- select 2 JS -->
+<script>
+    $(document).ready(function(){
+        $(document).ready(function() {
+            $('.institution-type-select').select2();
+        });
+    });
+</script>
+
+<!-- date input js -->
+<script>
+    $(document).ready(function() {
+        // Set date
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1;
+        var yyyy = today.getFullYear();
+        if (dd < 10){
+            dd = '0'+dd;
+        }
+        if (mm < 10){
+            mm = '0'+mm;
+        }
+        var date = mm + '/' + dd + '/' + yyyy;
+        if(document.getElementById("purchase_date")){
+            document.getElementById("purchase_date").value = date;
+        }
+        if(document.getElementById("last_inspection")){
+            document.getElementById("last_inspection").value = date;
+        }
+
+        // Set due date
+        var due = new Date();
+            due.setDate(due.getDate() + 180);
+            var due_dd = due.getDate();
+            var due_mm = due.getMonth()+1;
+            var due_yyyy = due.getFullYear();
+            if (dd < 10){
+                due_dd = '0'+due_dd;
+            }
+            if (due_mm < 10){
+                due_mm = '0'+due_mm;
+            }
+            var due_date = due_mm + '/' + due_dd + '/' + due_yyyy;
+            console.log(due_date)
+            if(document.getElementById("next_inspection")){
+                document.getElementById("next_inspection").value = due_date;
+            }
+
+
+    });
+
+</script>
+
+{% endblock %}
+
+
+

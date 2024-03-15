@@ -1,0 +1,742 @@
+{% extends 'lpg/base.html' %}
+
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Cylinder{% endblock %}
+
+{% block modal %}
+
+{% include 'lpg/components/modal/add_cylinder_sale.html' %} 
+{% include 'lpg/components/modal/add_cylinder_refill.html' %} 
+{% include 'lpg/components/modal/add_cylinder_exchange.html' %} 
+{% include 'lpg/components/modal/add_cylinder_inspection.html' %} 
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="app-main__inner">
+    <div class="app-page-title">
+        <div class="page-title-wrapper">
+            <div class="page-title-heading">
+                <div class="page-title-icon">
+                    <i class="pe-7s-drawer icon-gradient bg-happy-itmeo">
+                    </i>
+                </div>
+                <div>
+                    <a href="#">
+                        Cylinder
+                    </a>
+                </div>
+            </div>
+            <div class="page-title-actions">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="main-card mb-3 card">
+
+                <div class="card-header">
+                    <i class="header-icon lnr-screen icon-gradient bg-warm-flame"></i>
+                    Cylinders
+                    <div class="btn-actions-pane-right">
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <ul class="tabs-animated-shadow tabs-animated nav">
+                        <li class="nav-item">
+                            <a role="tab" class="nav-link active" id="tab-c-0" data-toggle="tab" href="#cylinder-details">
+                                <span>Cylinder Details</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="tab" class="nav-link" id="tab-c-1" data-toggle="tab" href="#activity">
+                                <span>Activity ()</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="tab" class="nav-link" id="tab-c-1" data-toggle="tab" href="#checks">
+                                <span>Checks ()</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="tab" class="nav-link" id="tab-c-4" data-toggle="tab" href="#exchanges">
+                                <span>Exchanges ()</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="tab" class="nav-link" id="tab-c-4" data-toggle="tab" href="#inspection">
+                                <span>Inspections ()</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="tab" class="nav-link" id="tab-c-3" data-toggle="tab" href="#refills">
+                                <span>Refills ()</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="tab" class="nav-link" id="tab-c-2" data-toggle="tab" href="#sales">
+                                <span>Sales ()</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="cylinder-details" role="tabpanel">
+                            <div class="card-hover-shadow card-border mb-3 card">
+                                <div class="card-header">
+                                    <i class="header-icon lnr-screen icon-gradient bg-warm-flame"></i>
+                                    Details
+                                    <div class="btn-actions-pane-right">
+
+                                    </div>
+                                </div>
+                                <div class="card-body"><h5 class="card-title">Edit Cylinder</h5>
+                                    <form method="post" action="{% url 'dashboard-lpg-update-cylinder' cylinder.id %}" autocomplete="off" class="form-horizontal form-label-left">
+                                        {% csrf_token %}
+
+                                        {% if errors %}
+                                            {% for field, field_errors in errors.items %}
+                                                <div class="alert alert-danger fade show" role="alert"> {{ field }}: {{ field_errors.0 }} </div>
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="position-relative form-group">
+                                                    <label for="serial_number" class="">
+                                                        Serial Number
+                                                    </label>
+                                                    <input name="serial_number" id="serial_number" placeholder="serial number"
+                                                        value="{{ cylinder.serial_number }}" type="text" class="form-control {% if errors.serial_number %}is-invalid{% endif %}" required="required">
+                                                    {% if errors.serial_number %}
+                                                        <div class="invalid-feedback">
+                                                            {{ errors.serial_number.0 }}
+                                                        </div>
+                                                    {% endif %}    
+                                                    <i>serial_number</i>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="position-relative form-group">
+                                                    <label for="cylinder_size" class="">
+                                                        Cylinder Size
+                                                    </label>
+                                                    <select required="required" style="width: 100%" name="cylinder_size" id="cylinder_size"
+                                                        class="cylinder-cylinder-size-select form-control {% if errors.cylinder_size %}is-invalid{% endif %} input-lg">
+                                                        <option selected disabled value="">Select Cylinder Size</option>
+                                                        {% for cylinder_size in cylinder_sizes %}
+                                                            <option {% if cylinder.size.id == cylinder_size.id %} selected {% endif %} value="{{ cylinder_size.id }}">
+                                                                {{ cylinder_size.size }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    {% if errors.cylinder_size %}
+                                                        <div class="invalid-feedback">
+                                                            {{ errors.cylinder_size.0 }}
+                                                        </div>
+                                                    {% endif %}
+                                                    <i>cylinder size</i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="position-relative form-group">
+                                                    <label for="purchase_date" class="">
+                                                        Purchase Date
+                                                    </label>
+                                                    <input required name="purchase_date" id="purchase_date" value="{{ cylinder.purchase_date|date:'m/d/Y' }}" type="text"
+                                                        class="form-control {% if errors.purchase_date %}is-invalid{% endif %}" data-toggle="datepicker" />
+                                                    {% if errors.purchase_date %}
+                                                        <div class="invalid-feedback">
+                                                            {{ errors.purchase_date.0 }}
+                                                        </div>
+                                                    {% endif %}
+                                                    <i>purchase date.</i>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="position-relative form-group">
+                                                    <label for="purchase_price" class="">
+                                                        Purchase Price
+                                                    </label>
+                                                    <input required name="purchase_price" id="purchase_price" type="number"
+                                                        value="{{ cylinder.purchase_price }}" class="form-control {% if errors.purchase_price %}is-invalid{% endif %}" />
+                                                    {% if errors.purchase_price %}
+                                                        <div class="invalid-feedback">
+                                                            {{ errors.purchase_price.0 }}
+                                                        </div>
+                                                    {% endif %}
+                                                    <i>purchase price.</i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="position-relative form-group">
+                                                    <label for="last_inspection" class="">
+                                                        last inspection
+                                                    </label>
+                                                    <input required name="last_inspection" id="last_inspection" value="{{ cylinder.last_inspection_date|date:'m/d/Y' }}"
+                                                        type="text" class="form-control {% if errors.last_inspection_date %}is-invalid{% endif %}" data-toggle="datepicker" />
+                                                    {% if errors.last_inspection_date %}
+                                                        <div class="invalid-feedback">
+                                                            {{ errors.last_inspection_date.0 }}
+                                                        </div>
+                                                    {% endif %}
+                                                    <i>last inspection.</i>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="position-relative form-group">
+                                                    <label for="next_inspection" class="">
+                                                        next inspection
+                                                    </label>
+                                                    <input required name="next_inspection" id="next_inspection" value="{{ cylinder.next_inspection_due_date|date:'m/d/Y' }}"
+                                                        type="text" class="form-control {% if errors.next_inspection_date %}is-invalid{% endif %}" data-toggle="datepicker" />
+                                                    {% if errors.next_inspection_date %}
+                                                        <div class="invalid-feedback">
+                                                            {{ errors.next_inspection_date.0 }}
+                                                        </div>
+                                                    {% endif %}
+                                                    <i>next inspection.</i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="position-relative form-group">
+                                            <label for="status" class="">
+                                                Status
+                                            </label>
+                                            <select required="required" style="width: 100%" name="status" id="status"
+                                                class="cylinder-status-select form-control {% if errors.status %}is-invalid{% endif %} input-lg">
+                                                <option selected disabled value="">Select Status</option>
+                                                {% for status in statuses %}
+                                                <option {% if cylinder.status_id|uuid == status.id|uuid %} selected {% endif %} value="{{ status.id }}">{{ status.name }}
+                                                </option>
+                                                {% if errors.status %}
+                                                    <div class="invalid-feedback">
+                                                        {{ errors.status.0 }}
+                                                    </div>
+                                                {% endif %}
+                                                {% endfor %}
+                                            </select>
+
+                                            <i>status</i>
+                                        </div>
+
+                                        <div class="position-relative form-group">
+                                            <label for="condition" class="">
+                                                Condition
+                                            </label>
+                                            <textarea required name="condition" placeholder="Condition" class="form-control {% if errors.condition %}is-invalid{% endif %}"
+                                                rows="3">{{ cylinder.condition }}</textarea>
+                                                {% if errors.condition %}
+                                                    <div class="invalid-feedback">
+                                                        {{ errors.condition.0 }}
+                                                    </div>
+                                                {% endif %}
+                                            <i>condition.</i>
+                                        </div>
+
+                                        <div class="position-relative form-group">
+                                            <label for="notes" class="">
+                                                Notes
+                                            </label>
+                                            <textarea required name="notes" placeholder="notes" class="form-control {% if errors.notes %}is-invalid{% endif %}" rows="3">{{ cylinder.notes }}</textarea>
+                                            {% if errors.notes %}
+                                                <div class="invalid-feedback">
+                                                    {{ errors.notes.0 }}
+                                                </div>
+                                            {% endif %}
+                                            <i>notes.</i>
+                                        </div>
+
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button type="submit" class="btn btn-block btn-lg btn-block btn-success">Update</button>
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="checks" role="tabpanel">
+                            <div class="card-hover-shadow card-border mb-3 card">
+                                <div class="card-header">
+                                    <i class="header-icon lnr-screen icon-gradient bg-warm-flame"></i>
+                                    Checks
+                                    <div class="btn-actions-pane-right">
+                                        
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <table class="mb-0 table table-bordered table-hover table-striped dataTables-example" >
+                                        <thead>
+                                            <tr>
+                                                <th>Ref</th>
+                                                <th>Date</th>
+                                                <th>Customer</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                    <td>ref</td>
+                                                    <td>date</td>
+                                                    <td>customer</td>
+                                                    <td>
+                                                        <span class="label status->label">name</span>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <div class="btn-group">
+                                                            <a href="{% url 'dashboard-lpg-cylinder' 1 %}" class="mb-2 mr-2 btn btn-primary">View</a>
+                                                            <a href="#" class="mb-2 mr-2 btn btn-warning">Restore</a>
+                                                            <a href="#" class="mb-2 mr-2 btn btn-danger">Delete</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Ref</th>
+                                                <th>Date</th>
+                                                <th>Customer</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="sales" role="tabpanel">
+                            <div class="card-hover-shadow card-border mb-3 card">
+                                <div class="card-header">
+                                    <i class="header-icon lnr-screen icon-gradient bg-warm-flame"></i>
+                                    Sales
+                                    <div class="btn-actions-pane-right">
+                                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target=".addCylinderSale"><i class="fa fa-plus"></i> Sale</button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <table class="mb-0 table table-bordered table-hover table-striped dataTables-example" >
+                                        <thead>
+                                            <tr>
+                                                <th>Ref</th>
+                                                <th>Price</th>
+                                                <th>Date</th>
+                                                <th>Customer</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                    <td>ref</td>
+                                                    <td>price</td>
+                                                    <td>date</td>
+                                                    <td>customer</td>
+                                                    <td>
+                                                        <span class="label status->label">name</span>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <div class="btn-group">
+                                                            <a href="{% url 'dashboard-lpg-cylinder' 1 %}" class="mb-2 mr-2 btn btn-primary">View</a>
+                                                            <a href="#" class="mb-2 mr-2 btn btn-warning">Restore</a>
+                                                            <a href="#" class="mb-2 mr-2 btn btn-danger">Delete</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Ref</th>
+                                                <th>Price</th>
+                                                <th>Date</th>
+                                                <th>Customer</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="refills" role="tabpanel">
+                            <div class="card-hover-shadow card-border mb-3 card">
+                                <div class="card-header">
+                                    <i class="header-icon lnr-screen icon-gradient bg-warm-flame"></i>
+                                    Refills
+                                    <div class="btn-actions-pane-right">
+                                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target=".addCylinderRefill"><i class="fa fa-plus"></i> Refill</button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <table class="mb-0 table table-bordered table-hover table-striped dataTables-example" >
+                                        <thead>
+                                            <tr>
+                                                <th>Ref</th>
+                                                <th>location</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                    <td>ref</td>
+                                                    <td>location</td>
+                                                    <td>date</td>
+                                                    <td>
+                                                        <span class="label status->label">name</span>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <div class="btn-group">
+                                                            <a href="{% url 'dashboard-lpg-cylinder' 1 %}" class="mb-2 mr-2 btn btn-primary">View</a>
+                                                            <a href="#" class="mb-2 mr-2 btn btn-warning">Restore</a>
+                                                            <a href="#" class="mb-2 mr-2 btn btn-danger">Delete</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Ref</th>
+                                                <th>location</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="exchanges" role="tabpanel">
+                            <div class="card-hover-shadow card-border mb-3 card">
+                                <div class="card-header">
+                                    <i class="header-icon lnr-screen icon-gradient bg-warm-flame"></i>
+                                    Exchanges
+                                    <div class="btn-actions-pane-right">
+                                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target=".addCylinderExchange"><i class="fa fa-plus"></i> Exchange</button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <table class="mb-0 table table-bordered table-hover table-striped dataTables-example" >
+                                        <thead>
+                                            <tr>
+                                                <th>Ref</th>
+                                                <th>Depot</th>
+                                                <th>EmptyCylinder</th>
+                                                <th>SoldCylinder</th>
+                                                <th>SaleID</th>
+                                                <th>Customer</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                    <td>ref</td>
+                                                    <td>depot</td>
+                                                    <td>cylinder1</td>
+                                                    <td>cylinder2</td>
+                                                    <td>sale_id</td>
+                                                    <td>customer</td>
+                                                    <td>
+                                                        <span class="label status->label">name</span>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <div class="btn-group">
+                                                            <a href="{% url 'dashboard-lpg-cylinder' 1 %}" class="mb-2 mr-2 btn btn-primary">View</a>
+                                                            <a href="#" class="mb-2 mr-2 btn btn-warning">Restore</a>
+                                                            <a href="#" class="mb-2 mr-2 btn btn-danger">Delete</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Ref</th>
+                                                <th>Depot</th>
+                                                <th>EmptyCylinder</th>
+                                                <th>SoldCylinder</th>
+                                                <th>SaleID</th>
+                                                <th>Status</th>
+                                                <th>Customer</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="inspection" role="tabpanel">
+                            <div class="card-hover-shadow card-border mb-3 card">
+                                <div class="card-header">
+                                    <i class="header-icon lnr-screen icon-gradient bg-warm-flame"></i>
+                                    Inspections
+                                    <div class="btn-actions-pane-right">
+                                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target=".addCylinderInspection"><i class="fa fa-plus"></i> Inspection</button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <table class="mb-0 table table-bordered table-hover table-striped dataTables-example" >
+                                        <thead>
+                                            <tr>
+                                                <th>Ref</th>
+                                                <th>Depot</th>
+                                                <th>Condition</th>
+                                                <th>Date</th>
+                                                <th>Next Inspection</th>
+                                                <th>By</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                    <td>ref</td>
+                                                    <td>depot</td>
+                                                    <td>coondiiion</td>
+                                                    <td>date</td>
+                                                    <td>next ate</td>
+                                                    <td>by</td>
+                                                    <td>
+                                                        <span class="label status->label">status</span>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <div class="btn-group">
+                                                            <a href="{% url 'dashboard-lpg-cylinder' 1 %}" class="mb-2 mr-2 btn btn-primary">View</a>
+                                                            <a href="#" class="mb-2 mr-2 btn btn-warning">Restore</a>
+                                                            <a href="#" class="mb-2 mr-2 btn btn-danger">Delete</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Ref</th>
+                                                <th>Depot</th>
+                                                <th>Condition</th>
+                                                <th>Date</th>
+                                                <th>Next Inspection</th>
+                                                <th>By</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="activity" role="tabpanel">
+                            <div class="card-hover-shadow card-border mb-3 card">
+                                <div class="card-header">
+                                    <i class="header-icon lnr-screen icon-gradient bg-warm-flame"></i>
+                                    Activity
+                                    <div class="btn-actions-pane-right">
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <table class="mb-0 table table-bordered table-hover table-striped dataTables-example" >
+                                        <thead>
+                                            <tr>
+                                                <th>Type</th>
+                                                <th>Date</th>
+                                                <th>Condition</th>
+                                                <th>Date</th>
+                                                <th>Next Inspection</th>
+                                                <th>By</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                    <td>ref</td>
+                                                    <td>depot</td>
+                                                    <td>coondiiion</td>
+                                                    <td>date</td>
+                                                    <td>next ate</td>
+                                                    <td>by</td>
+                                                    <td>
+                                                        <span class="label status->label">status</span>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <div class="btn-group">
+                                                            <a href="{% url 'dashboard-lpg-cylinder' 1 %}" class="mb-2 mr-2 btn btn-primary">View</a>
+                                                            <a href="#" class="mb-2 mr-2 btn btn-warning">Restore</a>
+                                                            <a href="#" class="mb-2 mr-2 btn btn-danger">Delete</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Ref</th>
+                                                <th>Depot</th>
+                                                <th>Condition</th>
+                                                <th>Date</th>
+                                                <th>Next Inspection</th>
+                                                <th>By</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+<!-- select 2 JS -->
+<!-- edit cylinder -->
+<script>
+    $(document).ready(function(){
+        $(document).ready(function() {
+            $('.cylinder-cylinder-size-select').select2();
+        });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $(document).ready(function() {
+            $('.cylinder-status-select').select2();
+        });
+    });
+</script>
+
+
+<!-- add cylinder exchange -->
+<script>
+    $(document).ready(function(){
+        $(document).ready(function() {
+            $('.cylinder-exchange-depot-select').select2();
+        });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $(document).ready(function() {
+            $('.cylinder-exchange-sale-select').select2();
+        });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $(document).ready(function() {
+            $('.cylinder-exchange-empty-cylinder-select').select2();
+        });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $(document).ready(function() {
+            $('.cylinder-exchange-full-cylinder-select').select2();
+        });
+    });
+</script>
+
+<!-- add cylinder refill -->
+<script>
+    $(document).ready(function(){
+        $(document).ready(function() {
+            $('.cylinder-refill-depot-select').select2();
+        });
+    });
+</script>
+
+
+
+
+
+
+<!-- date input js -->
+<script>
+    $(document).ready(function() {
+        // Set date
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1;
+        var yyyy = today.getFullYear();
+        if (dd < 10){
+            dd = '0'+dd;
+        }
+        if (mm < 10){
+            mm = '0'+mm;
+        }
+        var date = mm + '/' + dd + '/' + yyyy;
+        if(document.getElementById("cylinder_inspection_date")){
+            document.getElementById("cylinder_inspection_date").value = date;
+        }
+        if(document.getElementById("cylinder_refill_date")){
+            document.getElementById("cylinder_refill_date").value = date;
+        }
+        if(document.getElementById("cylinder_sale_date")){
+            document.getElementById("cylinder_sale_date").value = date;
+        }
+
+        // Set due date
+        var due = new Date();
+            due.setDate(due.getDate() + 180);
+            var due_dd = due.getDate();
+            var due_mm = due.getMonth()+1;
+            var due_yyyy = due.getFullYear();
+            if (dd < 10){
+                due_dd = '0'+due_dd;
+            }
+            if (due_mm < 10){
+                due_mm = '0'+due_mm;
+            }
+            var due_date = due_mm + '/' + due_dd + '/' + due_yyyy;
+            console.log(due_date)
+            if(document.getElementById("cylinder_next_inspection")){
+                document.getElementById("cylinder_next_inspection").value = due_date;
+            }
+
+
+    });
+
+</script>
+
+
+
+
+{% endblock %}
+

@@ -1,0 +1,143 @@
+<!-- add depot modal -->
+<div class="modal fade addDepot" tabindex="-1" role="dialog" aria-labelledby="addDepot" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDepotTitle">Add Depot</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" enctype="multipart/form-data" action="{% url 'dashboard-lpg-add-depot' %}" autocomplete="off" class="form-horizontal form-label-left">
+                    {% csrf_token %}
+
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-danger fade show" role="alert"> {{ message }} </div>
+                        {% endfor %}
+                    {% endif %}
+
+
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="depot_name" class="">
+                                    Name
+                                </label>
+                                <input name="depot_name" id="depot_name" placeholder="name" type="text" class="form-control" required="required">
+                                <i>name of the depot</i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="phone_number" class="">
+                                    Phone Number
+                                </label>
+                                <input required name="phone_number" id="phone_number" type="text" class="form-control" data-toggle="datepicker"/>
+                                <i>Depot contact phone number.</i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="email_address" class="">
+                                    Email
+                                </label>
+                                <input required name="email_address" id="email_address" type="email" class="form-control"/>
+                                <i>Depot contact email.</i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="is_existing_user" class="">
+                                    Existing user
+                                </label>
+                                <br>
+                                <input type="checkbox" name="is_existing_user" id="is_existing_user" class="js-switch_3" onclick = "userTypeSelected(this)"/>
+                                <br>
+                                <i>Select this if you want to assign an existing user to this depot, else leave  as is to register new user.</i>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+
+                    <div id="new_user">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="first_name" class="">
+                                        First Name
+                                    </label>
+                                    <input name="first_name" id="first_name" placeholder="first name" type="text" class="form-control">
+                                    <i>first name of the admin user</i>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="last_name" class="">
+                                        Last Name
+                                    </label>
+                                    <input name="last_name" id="last_name" placeholder="last name" type="text" class="form-control">
+                                    <i>last name of the admin user</i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="position-relative form-group">
+                            <label for="admin_email" class="">
+                                Email
+                            </label>
+                            <input required name="admin_email" id="admin_email" type="email" class="form-control"/>
+                            <i>admin user email.</i>
+                        </div>
+                    </div>
+
+                    <div id="existing_user" style="display: none;">
+                        <label for="users" class="">
+                            Users
+                        </label>
+                        <select required="required" style="width: 100%" name="admin_users[]" id="admin_users[]" class="user-select form-control input-lg" multiple="multiple">
+                            <option selected disabled value="">Select User</option>
+                            {% for institution_user in institution_users %}
+                                <option value="{{institution_user.user__id}}">{{institution_user.user__first_name}} {{institution_user.user__last_name}}</option>
+                                {% endfor %}
+                        </select>
+                        <i>users</i>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-block btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-block btn-block btn-success">Save</button>
+                        </div>
+                    </div>
+
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,96 @@
+<!-- add cylinder inspection modal -->
+<div class="modal fade addCylinderInspection" tabindex="-1" role="dialog" aria-labelledby="addCylinderInspection" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCylinderInspectionTitle">Add Cylinder Inspection</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" enctype="multipart/form-data" action="{% url 'dashboard-lpg-cylinder-add-inspection' 1 %}" autocomplete="off" class="form-horizontal form-label-left">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="depot" class="">
+                                    Depot
+                                </label>
+                                <select required="required" style="width: 100%" name="depot" id="cylinder_inspection_depot" class="cylinder-inspection-depot-select form-control input-lg">
+                                    <option selected disabled value="">Select Cylinder Size</option>
+                                    <option value="">6Kg</option>
+                                </select>
+                                <i>cylinder size</i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="status" class="">
+                                    Status
+                                </label>
+                                <select required="required" style="width: 100%" name="status" id="status" class="cylinder-inspection-status-select form-control input-lg">
+                                    <option selected disabled value="">Select Status</option>
+                                    <option value="">Status 1</option>
+                                </select>
+                                <i>status</i>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="inspection_date" class="">
+                                    Inspection Date
+                                </label>
+                                <input required name="inspection_date" id="cylinder_inspection_date" type="text" class="form-control"/>
+                                <i>inspection date.</i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="next_inspection" class="">
+                                    Next Inspection
+                                </label>
+                                <input required name="next_inspection" id="cylinder_next_inspection" type="text" class="form-control"/>
+                                <i>next inspection.</i>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+
+                    <div class="position-relative form-group">
+                        <label for="condition" class="">
+                            Condition
+                        </label>
+                        <textarea required name="condition" placeholder="Condition" class="form-control" rows="3"></textarea>
+                        <i>condition.</i>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-block btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-block btn-block btn-success">Save</button>
+                        </div>
+                    </div>
+
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>

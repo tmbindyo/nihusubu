@@ -1,0 +1,123 @@
+<!-- add institution modal -->
+<div class="modal fade addInstitution" tabindex="-1" role="dialog" aria-labelledby="addInstitution" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addInstitutionTitle">Add Institution</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" enctype="multipart/form-data" action="{% url 'dashboard-admin-add-institution' %}" autocomplete="off" class="form-horizontal form-label-left">
+                    {% csrf_token %}
+
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-danger fade show" role="alert"> {{ message }} </div>
+                        {% endfor %}
+                    {% endif %}
+
+
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="institution_name" class="">
+                                    Name
+                                </label>
+                                <input name="institution_name" id="institution_name" placeholder="name" type="text" class="form-control" required="required">
+                                <i>name of the institution</i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="institution_type" class="">
+                                    Institution Type
+                                </label>
+                                <select required="required" style="width: 100%" name="institution_type" id="institution_type" class="institution-type-select form-control input-lg">
+                                    <option selected disabled value="">Select Institution Type</option>
+                                    {% for institution_type in institution_types %}
+                                        <option value="{{institution_type.id}}">{{institution_type.name}}</option>
+                                        {% endfor %}
+                                </select>
+                                <i>institution type</i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="phone_number" class="">
+                                    Phone Number
+                                </label>
+                                <input required name="phone_number" id="phone_number" type="text" class="form-control" data-toggle="datepicker"/>
+                                <i>Institution contact phone number.</i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="email_address" class="">
+                                    Email
+                                </label>
+                                <input required name="email_address" id="email_address" type="email" class="form-control"/>
+                                <i>Institution contact email.</i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="first_name" class="">
+                                    First Name
+                                </label>
+                                <input name="first_name" id="first_name" placeholder="first name" type="text" class="form-control" required="required">
+                                <i>first name of the admin user</i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="last_name" class="">
+                                    Last Name
+                                </label>
+                                <input name="last_name" id="last_name" placeholder="last name" type="text" class="form-control" required="required">
+                                <i>last name of the admin user</i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="position-relative form-group">
+                        <label for="admin_email" class="">
+                            Email
+                        </label>
+                        <input required name="admin_email" id="admin_email" type="email" class="form-control"/>
+                        <i>admin user email.</i>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-block btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-block btn-block btn-success">Save</button>
+                        </div>
+                    </div>
+
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>

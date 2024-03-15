@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>User Accounts - MyGas</title>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+    <meta name="description" content="ArchitectUI HTML Bootstrap 4 Dashboard Template">
+
+    <meta name="msapplication-tap-highlight" content="no">
+    <link href="{% static 'architectui/pro-main.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow">
+        <div class="app-container">
+            <div class="h-100 bg-plum-plate bg-animation">
+                <div class="d-flex h-100 justify-content-center align-items-center">
+                    <div class="mx-auto app-login-box col-md-8">
+                        <div class="app-logo-inverse mx-auto mb-3"></div>
+                        <div class="modal-dialog w-100 mx-auto">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div class="h5 modal-title text-center">
+                                        <h4 class="mt-2">
+                                            <div>Hello,</div>
+                                            <span>Please choose the account to acceess.</span>
+                                        </h4>
+                                    </div>
+                                    <div>
+                                        {% for user_account in user_account_data %}
+                                            <a href="{% url 'dashboard-user-account' user_account.id %}" class="btn {%if user_account.is_active %} btn-success {%else%} btn-primary {%endif%} btn-lg btn-block"> 
+                                                {%if user_account.user_account_type_display == 1 %}
+                                                    ({{user_account.user_account_type_display_name}}) {{user_account.group_name}}
+                                                {%elif user_account.user_account_type_display == 2 %}
+                                                    ({{user_account.user_account_type_display_name}}) {{user_account.institution_name}} | {{user_account.group_name}}
+                                                {%elif user_account.user_account_type_display == 3 %}
+                                                    ({{user_account.user_account_type_display_name}}) {{user_account.depot_name}} | {{user_account.group_name}}
+                                                {%endif%}
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="modal-footer clearfix">
+                                    <div class="float-right">
+                                        <a href="{% url 'dashboard-logout' %}" class="btn btn-danger btn-lg">Logout</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="text-center text-white opacity-8 mt-3">Copyright © ArchitectUI 2019</div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="{% static 'architectui/assets/scripts/pro-main.js' %}"></script>
+</body>
+
+</html>
+

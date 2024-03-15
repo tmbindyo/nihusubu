@@ -1,0 +1,130 @@
+{% load custom_filters %}
+<!-- add cylinder exchange modal -->
+<div class="modal fade addCylinderExchange" tabindex="-1" role="dialog" aria-labelledby="addCylinderExchange" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCylinderExchangeTitle">Add Cylinder Exchange</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" enctype="multipart/form-data" action="{% url 'dashboard-lpg-cylinder-add-exchange' %}" autocomplete="off" class="form-horizontal form-label-left">
+                    {% csrf_token %}
+
+                    {% if errors %}
+                        {% for field, field_errors in errors.items %}
+                            <div class="alert alert-danger fade show" role="alert"> {{ field }}: {{ field_errors.0 }} </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="depot" class="">
+                                    Depot
+                                </label>
+                                <select required="required" style="width: 100%" name="depot" id="cylinder_exchange_depot" class="cylinder-exchange-depot-select form-control input-lg">
+                                    <option selected disabled value="">Select Depot</option>
+                                    <option value="">Kawangware</option>
+                                </select>
+                                {% if errors.serial_number %}
+                                    <div class="invalid-feedback">
+                                        {{ errors.serial_number.0 }}
+                                    </div>
+                                {% endif %}
+                                <i>depot</i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="sale" class="">
+                                    Sale
+                                </label>
+                                <select required="required" style="width: 100%" name="sale" id="sale" class="cylinder-exchange-sale-select form-control input-lg">
+                                    <option selected disabled value="">Select Sale</option>
+                                    <option value="">Sale 1</option>
+                                </select>
+                                {% if errors.serial_number %}
+                                    <div class="invalid-feedback">
+                                        {{ errors.serial_number.0 }}
+                                    </div>
+                                {% endif %}
+                                <i>sale</i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="empty_cylinder" class="">
+                                    Empty Cylinder
+                                </label>
+                                <select required="required" style="width: 100%" name="empty_cylinder" id="empty_cylinder" class="cylinder-exchange-empty-cylinder-select form-control input-lg">
+                                    <option selected disabled value="">Select Cylinder</option>
+                                    {% for cylinder in cylinders%}
+                                        <option {% if form_data.size == cylinder.id|uuid  %} selected {% endif %} value="{{cylinder.id}}">{{cylinder.serial_number}}</option>
+                                    {% endfor %}
+                                    </select>
+                                <i>empty cylinder</i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="new_cylinder" class="">
+                                    New Cylinder
+                                </label>
+                                <select required="required" style="width: 100%" name="new_cylinder" id="new_cylinder" class="cylinder-exchange-full-cylinder-select form-control input-lg">
+                                    <option selected disabled value="">Select Cylinder</option>
+                                    {% for cylinder in cylinders%}
+                                        <option {% if form_data.size == cylinder.id|uuid  %} selected {% endif %} value="{{cylinder.id}}">{{cylinder.serial_number}}</option>
+                                    {% endfor %}
+                                </select>
+                                {% if errors.serial_number %}
+                                    <div class="invalid-feedback">
+                                        {{ errors.serial_number.0 }}
+                                    </div>
+                                {% endif %}
+                                <i>new cylinder</i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="position-relative form-group">
+                        <label for="condition" class="">
+                            Notes
+                        </label>
+                        <textarea required name="notes" placeholder="notes" class="form-control" rows="3"></textarea>
+                        {% if errors.notes %}
+                            <div class="invalid-feedback">
+                                {{ errors.notes.0 }}
+                            </div>
+                        {% endif %}
+                        <i>notes.</i>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-block btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-block btn-block btn-success">Save</button>
+                        </div>
+                    </div>
+
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>

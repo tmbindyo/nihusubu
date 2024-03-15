@@ -1,0 +1,89 @@
+<!-- add cylinder sale modal -->
+<div class="modal fade addCylinderSale" tabindex="-1" role="dialog" aria-labelledby="addCylinderSale" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCylinderSaleTitle">Add Cylinder Sale</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" enctype="multipart/form-data" action="{% url 'dashboard-lpg-cylinder-add-sale' 1 %}" autocomplete="off" class="form-horizontal form-label-left">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="date" class="">
+                                    Date
+                                </label>
+                                <input required name="date" id="cylinder_sale_date" type="text" class="form-control" data-toggle="datepicker"/>
+                                <i>date.</i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="depot" class="">
+                                    Depot
+                                </label>
+                                <select required="required" style="width: 100%" name="depot" id="add_cylinder_refill_depot" class="cylinder-sale-depot-select form-control input-lg">
+                                    <option selected disabled value="">Select Depot</option>
+                                    <option value="">Kawangware 1</option>
+                                </select>
+                                <i>depot</i>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="position-relative form-group">
+                        <label for="customer" class="">
+                            Customer
+                        </label>
+                        <select required="required" style="width: 100%" name="customer" id="customer" class="cylinder-sale-customer-select form-control input-lg">
+                            <option selected disabled value="">Select Customer</option>
+                            <option value="">customer 1</option>
+                        </select>
+                        <i>customer</i>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="date" class="">
+                                    Date
+                                </label>
+                                <input required name="date" id="cylinder_sale_date" type="checkbox" class="form-control"/>
+                                <i>date.</i>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-block btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-block btn-block btn-success">Save</button>
+                        </div>
+                    </div>
+
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,187 @@
+{% load custom_filters %}
+
+<!-- add cylinder modal -->
+<div class="modal fade addCylinder" tabindex="-1" role="dialog" aria-labelledby="addCylinder" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCylinderTitle">Add Cylinder</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" enctype="multipart/form-data" action="{% url 'dashboard-lpg-add-cylinder' %}" autocomplete="off" class="form-horizontal form-label-left">
+                    {% csrf_token %}
+
+                    {% if errors %}
+                        {% for field, field_errors in errors.items %}
+                            <div class="alert alert-danger fade show" role="alert"> {{ field }}: {{ field_errors.0 }} </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="serial_number" class="">
+                                    Serial Number
+                                </label>
+                                <input name="serial_number" id="serial_number" placeholder="serial number" value="{{ form_data.serial_number }}" type="text" class="form-control {% if errors.serial_number %}is-invalid{% endif %}" required="required">
+                                {% if errors.serial_number %}
+                                    <div class="invalid-feedback">
+                                        {{ errors.serial_number.0 }}
+                                    </div>
+                                {% endif %}
+                                <i>serial_number</i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="cylinder_size" class="">
+                                    Cylinder Size
+                                </label>
+                                <select required="required" style="width: 100%" name="cylinder_size" id="cylinder_size" class="cylinder-cylinder-size-select {% if errors.cylinder_size %}is-invalid{% endif %} form-control input-lg">
+                                    <option selected disabled value="">Select Cylinder Size</option>
+                                    {% for cylinder_size in cylinder_sizes %}
+                                        <option {% if form_data.size == cylinder_size.id|uuid  %} selected {% endif %} value="{{cylinder_size.id}}">{{cylinder_size.size}}</option>
+                                    {% endfor %}
+                                </select>
+                                {% if errors.cylinder_size %}
+                                    <div class="invalid-feedback">
+                                        {{ errors.cylinder_size.0 }}
+                                    </div>
+                                {% endif %}
+                                <i>cylinder size</i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="purchase_date" class="">
+                                    Purchase Date
+                                </label>
+                                <input required name="purchase_date" id="purchase_date" value="{{ form_data.purchase_date }}" type="text" class="form-control {% if errors.purchase_date %}is-invalid{% endif %} input-mask-trigger" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-toggle="datepicker"/>
+                                {% if errors.purchase_date %}
+                                    <div class="invalid-feedback">
+                                        {{ errors.purchase_date.0 }}
+                                    </div>
+                                {% endif %}
+                                <i>purchase date [mm/dd/yyyy]</i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="purchase_price" class="">
+                                    Purchase Price
+                                </label>
+                                <input required name="purchase_price" id="purchase_price" type="number" value="{{ form_data.purchase_price }}" class="form-control {% if errors.purchase_price %}is-invalid{% endif %}"/>
+                                {% if errors.purchase_price %}
+                                    <div class="invalid-feedback">
+                                        {{ errors.purchase_price.0 }}
+                                    </div>
+                                {% endif %}
+                                <i>purchase price.</i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="last_inspection" class="">
+                                    last inspection
+                                </label>
+                                <input required name="last_inspection" id="last_inspection" value="{{ form_data.last_inspection }}" type="text" class="form-control {% if errors.last_inspection_date %}is-invalid{% endif %} input-mask-trigger" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-toggle="datepicker"/>
+                                {% if errors.last_inspection_date %}
+                                    <div class="invalid-feedback">
+                                        {{ errors.last_inspection_date.0 }}
+                                    </div>
+                                {% endif %}
+                                <i>last inspection [mm/dd/yyyy]</i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="next_inspection" class="">
+                                    next inspection
+                                </label>
+                                <input required name="next_inspection" id="next_inspection" value="{{ form_data.next_inspection }}" type="text" class="form-control {% if errors.next_inspection_date %}is-invalid{% endif %} input-mask-trigger" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-toggle="datepicker"/>
+                                {% if errors.next_inspection_date %}
+                                    <div class="invalid-feedback">
+                                        {{ errors.next_inspection_date.0 }}
+                                    </div>
+                                {% endif %}
+                                <i>next inspection [mm/dd/yyyy]</i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="position-relative form-group">
+                        <label for="status" class="">
+                            Status
+                        </label>
+                        <select required="required" style="width: 100%" name="status" id="status" class="cylinder-status-select {% if errors.status %}is-invalid{% endif %} form-control input-lg">
+                            <option selected disabled value="">Select Status</option>
+                            {% for status in statuses %}
+                                <option {% if form_data.status == status.id|uuid %} selected {% endif %} value="{{ status.id }}">{{ status.name }}</option>
+                            {% endfor %}
+                        </select>
+                        {% if errors.status %}
+                            <div class="invalid-feedback">
+                                {{ errors.status.0 }}
+                            </div>
+                        {% endif %}
+                        <i>status</i>
+                    </div>
+
+                    <div class="position-relative form-group">
+                        <label for="condition" class="">
+                            Condition
+                        </label>
+                        <textarea required name="condition" placeholder="Condition" class="form-control {% if errors.condition %}is-invalid{% endif %}" rows="3">{{ form_data.condition }}</textarea>
+                        {% if errors.condition %}
+                            <div class="invalid-feedback">
+                                {{ errors.condition.0 }}
+                            </div>
+                        {% endif %}
+                        <i>condition.</i>
+                    </div>
+
+                    <div class="position-relative form-group">
+                        <label for="notes" class="">
+                            Notes
+                        </label>
+                        <textarea required name="notes" placeholder="notes" class="form-control {% if errors.notes %}is-invalid{% endif %}" rows="3">{{ form_data.notes }}</textarea>
+                        {% if errors.notes %}
+                            <div class="invalid-feedback">
+                                {{ errors.notes.0 }}
+                            </div>
+                        {% endif %}
+                        <i>notes.</i>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-block btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-block btn-block btn-success">Save</button>
+                        </div>
+                    </div>
+
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>

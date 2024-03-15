@@ -1,0 +1,102 @@
+{% extends 'lpg/base.html' %}
+
+{% load static %}
+
+{% block title %}Roles{% endblock %}
+
+{% block modal %}
+
+{% include 'lpg/components/modal/add_role.html' %} 
+
+{% endblock %}
+
+{% block content %}
+
+<div class="app-main__inner">
+    <div class="app-page-title">
+        <div class="page-title-wrapper">
+            <div class="page-title-heading">
+                <div class="page-title-icon">
+                    <i class="pe-7s-drawer icon-gradient bg-happy-itmeo">
+                    </i>
+                </div>
+                <div>
+                    <a href="#">
+                        Roles
+                    </a>
+                </div>
+            </div>
+            <div class="page-title-actions">
+                <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target=".addRole"><i class="fa fa-plus"></i> Role</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="main-card mb-3 card">
+
+                <div class="card-header">
+                    <i class="header-icon lnr-screen icon-gradient bg-warm-flame"></i>
+                    Roles
+                    <div class="btn-actions-pane-right">
+                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target=".addRole"><i class="fa fa-plus"></i> Role</button>
+                    </div>
+                </div>
+
+                <div class="card-body"><h5 class="card-title">Roles</h5>
+                    <table class="mb-0 table table-bordered table-hover table-striped dataTables-example" >
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for institution_group in institution_groups %}
+                                <tr>
+                                    <td>
+                                        {% with prefix=active_user_account_data.institution_slug|add:"-" %}
+                                            {{ institution_group.name|cut:prefix }}
+                                        {% endwith %}
+                                    </td>
+                                    
+                                    <td>
+                                        <span class="label status->label">name</span>
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="btn-group">
+                                            <a href="{% url 'dashboard-lpg-role' institution_group.id %}" class="mb-2 mr-2 btn btn-primary">View</a>
+                                            <a href="#" class="mb-2 mr-2 btn btn-warning">Restore</a>
+                                            <a href="#" class="mb-2 mr-2 btn btn-danger">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}
+
+
+
+
+

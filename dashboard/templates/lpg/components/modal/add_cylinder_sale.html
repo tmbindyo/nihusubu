@@ -1,0 +1,187 @@
+{% load custom_filters %}
+<!-- add cylinder sale modal -->
+<div class="modal fade addCylinderSale" tabindex="-1" role="dialog" aria-labelledby="addCylinderSale" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCylinderSaleTitle">Add Cylinder Sale</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" enctype="multipart/form-data" action="{% url 'dashboard-lpg-cylinder-add-sale' %}" autocomplete="off" class="form-horizontal form-label-left">
+                    {% csrf_token %}
+
+                    {% if errors %}
+                        {% for field, field_errors in errors.items %}
+                            <div class="alert alert-danger fade show" role="alert"> {{ field }}: {{ field_errors.0 }} </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="date" class="">
+                                    Date
+                                </label>
+                                <input required name="date" id="cylinder_sale_date" type="text" class="form-control {% if errors.sale_date %}is-invalid{% endif %} input-mask-trigger"  data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy"" data-toggle="datepicker"/>
+                                {% if errors.sale_date %}
+                                    <div class="invalid-feedback">
+                                        {{ errors.sale_date.0 }}
+                                    </div>
+                                {% endif %}
+                                <i>date.</i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="depot" class="">
+                                    Depot
+                                </label>
+                                <select required="required" style="width: 100%" name="depot" id="add_cylinder_refill_depot" class="cylinder-sale-depot-select {% if errors.depot %}is-invalid{% endif %} form-control input-lg">
+                                    <option selected disabled value="">Select Depot</option>
+                                    {% for depot in depots %}
+                                        <option {% if form_data.depot == depot.id|uuid  %} selected {% endif %} value="{{depot.id}}">{{depot.name}}</option>
+                                    {% endfor %}
+                                </select>
+                                {% if errors.depot %}
+                                    <div class="invalid-feedback">
+                                        {{ errors.depot.0 }}
+                                    </div>
+                                {% endif %}
+                                <i>depot</i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="cylinder" class="">
+                                    Depot
+                                </label>
+                                <select required="required" style="width: 100%" name="cylinder" id="add_cylinder_refill_cylinder" class="cylinder-sale-cylinder-select {% if errors.cylinder %}is-invalid{% endif %} form-control input-lg">
+                                    <option selected disabled value="">Select Cylinder</option>
+                                    {% for cylinder in cylinders %}
+                                        <option {% if form_data.cylinder == cylinder.id|uuid  %} selected {% endif %} value="{{cylinder.id}}">{{cylinder.serial_number}}</option>
+                                    {% endfor %}
+                                </select>
+                                {% if errors.cylinder %}
+                                    <div class="invalid-feedback">
+                                        {{ errors.cylinder.0 }}
+                                    </div>
+                                {% endif %}
+                                <i>cylinder</i>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="is_existing_user" class="">
+                                    Existing customer
+                                </label>
+                                <br>
+                                <input type="checkbox" name="is_existing_user" id="is_existing_user" class="js-switch_3" onclick = "userTypeSelected(this)"/>
+                                <br>
+                                {% if errors.is_existing_user %}
+                                    <div class="invalid-feedback">
+                                        {{ errors.is_existing_user.0 }}
+                                    </div>
+                                {% endif %}
+                                <i>Select this if you want to assign an existing custoomer to this depot, else leave  as is to register new customer.</i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="new_customer">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="first_name" class="">
+                                        First Name
+                                    </label>
+                                    <input name="first_name" id="first_name" placeholder="first name" type="text" class="form-control {% if errors.first_name %}is-invalid{% endif %}">
+                                    {% if errors.first_name %}
+                                        <div class="invalid-feedback">
+                                            {{ errors.first_name.0 }}
+                                        </div>
+                                    {% endif %}
+                                    <i>first name of the customer</i>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="last_name" class="">
+                                        Last Name
+                                    </label>
+                                    <input name="last_name" id="last_name" placeholder="last name" type="text" class="form-control {% if errors.last_name %}is-invalid{% endif %}">
+                                    {% if errors.last_name %}
+                                        <div class="invalid-feedback">
+                                            {{ errors.last_name.0 }}
+                                        </div>
+                                    {% endif %}
+                                    <i>last name of the customer</i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="position-relative form-group">
+                            <label for="phone_number" class="">
+                                Phone Number
+                            </label>
+                            <input required name="phone_number" id="phone_number" type="text" class="form-control {% if errors.phone_number %}is-invalid{% endif %}"/>
+                            {% if errors.phone_number %}
+                                <div class="invalid-feedback">
+                                    {{ errors.phone_number.0 }}
+                                </div>
+                            {% endif %}
+                            <i>customer user phone number.</i>
+                        </div>
+                    </div>
+
+                    <div id="existing_customer" style="display: none;">
+                        <label for="customers" class="">
+                            Customers
+                        </label>
+                        <select required="required" style="width: 100%" name="customer" id="customer" class="cylinder-sale-customer-select {% if errors.customer %}is-invalid{% endif %} form-control input-lg" disabled>
+                            <option selected disabled value="">Select Customer</option>
+                            {% for institution_customer in institution_customers %}
+                                <option value="{{institution_customer.id}}">{{institution_customer.first_name}} {{institution_customer.last_name}}</option>
+                            {% endfor %}
+                        </select>
+                        {% if errors.customer %}
+                            <div class="invalid-feedback">
+                                {{ errors.customer.0 }}
+                            </div>
+                        {% endif %}
+                        <i>customer</i>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-block btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-block btn-block btn-success">Save</button>
+                        </div>
+                    </div>
+
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>

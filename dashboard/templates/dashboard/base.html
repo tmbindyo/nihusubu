@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title> {% block title %}   {% endblock %}</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+    <meta name="description" content="This is an example dashboard created using build-in elements and components.">
+    <meta name="msapplication-tap-highlight" content="no">
+    <!--
+    =========================================================
+    * ArchitectUI HTML Theme Dashboard - v1.0.0
+    =========================================================
+    * Product Page: https://dashboardpack.com
+    * Copyright 2019 DashboardPack (https://dashboardpack.com)
+    * Licensed under MIT (https://github.com/DashboardPack/architectui-html-theme-free/blob/master/LICENSE)
+    =========================================================
+    * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+    -->
+
+<!-- <link href="./main.css" rel="stylesheet"></head> -->
+<link href="{% static 'architectui/pro-main.css' %}" rel="stylesheet">
+<!-- select 2 -->
+<link href="{% static 'architectui/select-2.css' %}" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css" rel="stylesheet">
+
+<!-- page modals start -->
+    {% block modal %}
+                                
+    {% endblock %}
+<!-- page modals end -->
+
+</head>
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        <!-- top bar start -->
+        {% include 'dashboard/components/navbar/top.html' %}
+        <!-- top bar end -->
+        
+        <!-- right bar start -->
+            {% include 'dashboard/components/navbar/right.html' %}
+        <!-- right bar end -->
+        
+        <div class="app-main">
+                <!-- sidebar start -->
+                    {% include 'dashboard/components/navbar/left.html' %}
+                <!-- sidebar end -->
+                
+                <div class="app-main__outer">
+
+                    <!-- page content start -->
+                        {% block content %}
+                            
+                        {% endblock %}
+                    <!-- page content end -->
+
+                    <!-- bottom start -->
+                        {% include 'dashboard/components/navbar/bottom.html' %}
+                    <!-- bottom end -->
+
+                </div>
+                <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+        </div>
+    </div>
+    
+    <div class="app-drawer-overlay d-none animated fadeIn"></div>
+    <script type="text/javascript" src="{% static 'architectui/assets/scripts/pro-main.js' %}"></script>
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="{% static 'inspinia/js/jquery-2.1.1.js' %}"></script>
+    <script type="text/javascript" src="{% static 'architectui/assets/scripts/select-2.js' %}"></script>
+
+    <!-- Datatables -->
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.dataTables-example').DataTable({
+                dom: '<"html5buttons"B>lTfgitp',
+                buttons: [
+                    { extend: 'copy'},
+                    {extend: 'csv'},
+                    {extend: 'excel', title: 'ExampleFile'},
+                    {extend: 'pdf', title: 'ExampleFile'},
+
+                    {extend: 'print',
+                    customize: function (win){
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+
+                            $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                    }
+                    }
+                ]
+            });
+            /* Init DataTables */
+            var oTable = $('#editable').DataTable();
+        });
+    </script>
+
+    <!-- page line JS start -->
+        {% block js %}
+                                
+        {% endblock %}
+    <!-- page line JS end -->
+
+</body>
+</html>
